@@ -1,3 +1,4 @@
+
 <template>
   <div
     class="rounded-2xl border border-gray-200 bg-gray-100 dark:border-gray-800 dark:bg-white/[0.03]"
@@ -133,13 +134,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
 import DropdownMenu from '../common/DropdownMenu.vue'
 const menuItems = [
   { label: 'View More', onClick: () => console.log('View More clicked') },
   { label: 'Delete', onClick: () => console.log('Delete clicked') },
 ]
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 
 const props = defineProps({
   value: {
@@ -150,7 +152,7 @@ const props = defineProps({
 
 const series = computed(() => [props.value])
 
-const chartOptions = {
+const chartOptions: ApexOptions = {
   colors: ['#465FFF'],
   chart: {
     fontFamily: 'Outfit, sans-serif',

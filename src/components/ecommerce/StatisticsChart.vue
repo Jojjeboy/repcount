@@ -68,11 +68,16 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import flatPickr from 'vue-flatpickr-component'
 
-const options = [
+interface Option {
+  value: string
+  label: string
+}
+
+const options: Option[] = [
   { value: 'optionOne', label: 'Monthly' },
   { value: 'optionTwo', label: 'Quarterly' },
   { value: 'optionThree', label: 'Annually' },
@@ -82,11 +87,12 @@ const selected = ref('optionOne')
 const date = ref('')
 
 const flatpickrConfig = {
-  mode: 'range',
+  mode: 'range' as const,
   dateFormat: 'M j',
   defaultDate: [new Date(Date.now() - 7 * 24 * 60 * 60 * 1000), new Date()],
 }
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 
 const series = ref([
   {
@@ -99,7 +105,7 @@ const series = ref([
   },
 ])
 
-const chartOptions = ref({
+const chartOptions = ref<ApexOptions>({
   legend: {
     show: false,
     position: 'top',
@@ -115,7 +121,6 @@ const chartOptions = ref({
   },
   fill: {
     gradient: {
-      enabled: true,
       opacityFrom: 0.55,
       opacityTo: 0,
     },
@@ -126,10 +131,6 @@ const chartOptions = ref({
   },
   markers: {
     size: 0,
-  },
-  labels: {
-    show: false,
-    position: 'top',
   },
   grid: {
     xaxis: {

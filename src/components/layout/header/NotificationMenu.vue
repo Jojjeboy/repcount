@@ -105,15 +105,26 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 
+interface Notification {
+  id: number
+  userName: string
+  userImage: string
+  action: string
+  project: string
+  type: string
+  time: string
+  status: 'online' | 'offline'
+}
+
 const dropdownOpen = ref(false)
 const notifying = ref(true)
-const dropdownRef = ref(null)
+const dropdownRef = ref<HTMLElement | null>(null)
 
-const notifications = ref([
+const notifications = ref<Notification[]>([
   {
     id: 1,
     userName: 'Terry Franci',
@@ -206,20 +217,20 @@ const closeDropdown = () => {
   dropdownOpen.value = false
 }
 
-const handleClickOutside = (event) => {
-  if (dropdownRef.value && !dropdownRef.value.contains(event.target)) {
+const handleClickOutside = (event: MouseEvent) => {
+  if (dropdownRef.value && !dropdownRef.value.contains(event.target as Node)) {
     closeDropdown()
   }
 }
 
-const handleItemClick = (event) => {
+const handleItemClick = (event: MouseEvent) => {
   event.preventDefault()
   // Handle the item click action here
   console.log('Notification item clicked')
   closeDropdown()
 }
 
-const handleViewAllClick = (event) => {
+const handleViewAllClick = (event: MouseEvent) => {
   event.preventDefault()
   // Handle the "View All Notification" action here
   console.log('View All Notifications clicked')

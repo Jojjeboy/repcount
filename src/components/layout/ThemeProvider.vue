@@ -5,8 +5,6 @@
 <script setup lang="ts">
 import { ref, provide, onMounted, watch, computed } from 'vue'
 
-type Theme = 'light' | 'dark'
-
 const theme = ref<Theme>('light')
 const isInitialized = ref(false)
 
@@ -35,17 +33,24 @@ watch([theme, isInitialized], ([newTheme, newIsInitialized]) => {
   }
 })
 
-provide('theme', {
+provide<ThemeContext>('theme', {
   isDarkMode,
   toggleTheme,
 })
 </script>
 
 <script lang="ts">
-import { inject } from 'vue'
+import { inject, type ComputedRef } from 'vue'
+
+export type Theme = 'light' | 'dark'
+
+export interface ThemeContext {
+  isDarkMode: ComputedRef<boolean>
+  toggleTheme: () => void
+}
 
 export function useTheme() {
-  const theme = inject('theme')
+  const theme = inject<ThemeContext>('theme')
   if (!theme) {
     throw new Error('useTheme must be used within a ThemeProvider')
   }

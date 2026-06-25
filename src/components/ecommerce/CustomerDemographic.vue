@@ -77,6 +77,7 @@ import jsVectorMap from 'jsvectormap'
 import 'jsvectormap/dist/maps/world'
 
 const mapOneRef = ref<HTMLElement | null>(null)
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const mapInstance = ref<any>(null)
 
 const initMap = () => {
@@ -123,8 +124,9 @@ const initMap = () => {
         selected: {},
         selectedHover: {},
       },
-      onRegionTooltipShow: function (event: MouseEvent, tooltip: any) {
-        const code = (event.target as HTMLElement).getAttribute('data-code')
+       onRegionTooltipShow: function (event: MouseEvent, // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                     tooltip: any) {
+         const code = (event.target as HTMLElement).getAttribute('data-code')
         if (code === 'EG') {
           tooltip.setContent(tooltip.text() + ' (Hello Egypt)')
         }

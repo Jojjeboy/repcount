@@ -85,10 +85,20 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 
-const users = ref([
+interface User {
+  name: string
+  role: string
+  avatar: string
+  project: string
+  team: string[]
+  status: 'Active' | 'Pending' | 'Cancel'
+  budget: string
+}
+
+const users = ref<User[]>([
   {
     name: 'Lindsey Curtis',
     role: 'Web Designer',

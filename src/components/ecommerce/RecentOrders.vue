@@ -125,10 +125,19 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 
-const products = ref([
+interface Product {
+  name: string
+  variants: number
+  image: string
+  category: string
+  price: string
+  status: 'Delivered' | 'Pending' | 'Canceled'
+}
+
+const products = ref<Product[]>([
   {
     name: 'Macbook pro 13"',
     variants: 2,

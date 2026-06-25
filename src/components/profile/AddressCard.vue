@@ -160,7 +160,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref } from 'vue'
 import Modal from './Modal.vue'
 
@@ -169,7 +169,7 @@ const isProfileAddressModal = ref(false)
 const saveProfile = () => {
   // Implement save profile logic here
   console.log('Profile saved')
-  isProfileInfoModal.value = false
+  isProfileAddressModal.value = false
 }
 </script>
 

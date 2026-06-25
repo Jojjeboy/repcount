@@ -53,7 +53,7 @@ function getEnvPrefix() {
       if (deps['@vue/cli-service']) return 'VUE_APP_'
       if (deps['svelte']) return 'VITE_'
     }
-  } catch (_error) {
+  } catch {
     // Ignore error
   }
   return ''
@@ -103,7 +103,7 @@ function syncToGitHub() {
   // Check if gh CLI is installed
   try {
     execSync('gh --version', { stdio: 'ignore' })
-  } catch (error) {
+  } catch {
     console.log('ℹ️ GitHub CLI (gh) hittades inte på den här datorn. Hoppar över synkronisering.')
     console.log('   Tips: Installera det via https://cli.github.com/ för att automatisera detta i framtiden.\n')
     return
@@ -112,7 +112,7 @@ function syncToGitHub() {
   // Check if authenticated
   try {
     execSync('gh auth status', { stdio: 'ignore' })
-  } catch (error) {
+  } catch {
     console.log('ℹ️ GitHub CLI är installerat men du är inte inloggad.')
     console.log('   Kör "gh auth login" i din terminal först om du vill synka dina hemligheter.\n')
     return
@@ -121,7 +121,7 @@ function syncToGitHub() {
   // Check if we are inside a Git repository linked to GitHub
   try {
     execSync('gh repo view', { stdio: 'ignore' })
-  } catch (error) {
+  } catch {
     console.log('ℹ️ Nuvarande mapp verkar inte vara ett länkat GitHub-repository.')
     console.log('   Kör "git init" och koppla ett fjärr-repo (remote) först.\n')
     return
@@ -134,7 +134,7 @@ function syncToGitHub() {
       // Set the secret. Using --body avoids issues with special characters in shells.
       execSync(`gh secret set ${key} --body "${value}"`, { stdio: 'inherit' })
       console.log(`   ✅ Synkade hemlighet: ${key}`)
-    } catch (error) {
+    } catch {
       console.error(`   ❌ Misslyckades att synka hemlighet: ${key}`)
     }
   }

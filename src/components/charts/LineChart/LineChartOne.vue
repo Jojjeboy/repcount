@@ -10,6 +10,7 @@
 import { ref } from 'vue'
 
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 
 const series = ref([
   {
@@ -22,7 +23,7 @@ const series = ref([
   },
 ])
 
-const chartOptions = ref({
+const chartOptions = ref<ApexOptions>({
   legend: {
     show: false,
     position: 'top',
@@ -37,8 +38,8 @@ const chartOptions = ref({
     },
   },
   fill: {
+    type: 'gradient',
     gradient: {
-      enabled: true,
       opacityFrom: 0.55,
       opacityTo: 0,
     },
@@ -49,10 +50,6 @@ const chartOptions = ref({
   },
   markers: {
     size: 0,
-  },
-  labels: {
-    show: false,
-    position: 'top',
   },
   grid: {
     xaxis: {
@@ -75,6 +72,10 @@ const chartOptions = ref({
     },
   },
   xaxis: {
+    labels: {
+      show: false,
+    },
+    position: 'top',
     type: 'category',
     categories: [
       'Jan',

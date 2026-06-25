@@ -35,8 +35,8 @@
   </div>
 </template>
 
-<script setup>
-import { ref, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref } from 'vue'
 import DropdownMenu from '../common/DropdownMenu.vue'
 const menuItems = [
   { label: 'View More', onClick: () => console.log('View More clicked') },
@@ -44,6 +44,7 @@ const menuItems = [
 ]
 
 import VueApexCharts from 'vue3-apexcharts'
+import type { ApexOptions } from 'apexcharts'
 
 const series = ref([
   {
@@ -52,7 +53,7 @@ const series = ref([
   },
 ])
 
-const chartOptions = ref({
+const chartOptions = ref<ApexOptions>({
   colors: ['#465fff'],
   chart: {
     fontFamily: 'Outfit, sans-serif',
@@ -105,11 +106,13 @@ const chartOptions = ref({
     horizontalAlign: 'left',
     fontFamily: 'Outfit',
     markers: {
-      radius: 99,
+      size: 99,
     },
   },
   yaxis: {
-    title: false,
+    title: {
+      text: '',
+    },
   },
   grid: {
     yaxis: {
@@ -126,14 +129,11 @@ const chartOptions = ref({
       show: false,
     },
     y: {
-      formatter: function (val) {
+      formatter: function (val: number) {
         return val.toString()
       },
     },
   },
 })
 
-onMounted(() => {
-  // Any additional setup can be done here if needed
-})
 </script>
