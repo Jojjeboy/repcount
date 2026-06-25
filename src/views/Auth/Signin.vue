@@ -43,9 +43,10 @@
               </div>
               <div>
                 <div class="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5">
-                  <button
-                    class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
-                  >
+<button
+  @click="signInWithGoogle"
+  class="inline-flex items-center justify-center gap-3 py-3 text-sm font-normal text-gray-700 transition-colors bg-gray-100 rounded-lg px-7 hover:bg-gray-200 hover:text-gray-800 dark:bg-white/5 dark:text-white/90 dark:hover:bg-white/10"
+>
                     <svg
                       width="20"
                       height="20"
@@ -274,8 +275,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { signInWithPopup } from 'firebase/auth'
+import { auth, googleProvider } from '@/firebase'
 import CommonGridShape from '@/components/common/CommonGridShape.vue'
 import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
+
+const router = useRouter()
 const email = ref('')
 const password = ref('')
 const showPassword = ref(false)
@@ -283,6 +289,16 @@ const keepLoggedIn = ref(false)
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
+}
+
+const signInWithGoogle = async () => {
+  try {
+    await signInWithPopup(auth, googleProvider)
+    router.push('/')
+  } catch (error) {
+    console.error('Error signing in with Google:', error)
+    alert('Failed to sign in with Google. Please try again.')
+  }
 }
 
 const handleSubmit = () => {

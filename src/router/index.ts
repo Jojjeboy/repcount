@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { auth } from '@/firebase'
+import { onAuthStateChanged } from 'firebase/auth'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -145,7 +147,31 @@ const router = createRouter({
 
 export default router
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   document.title = `Vue.js ${to.meta.title} | TailAdmin - Vue.js Tailwind CSS Dashboard Template`
-  next()
+
+  const publicPages = ['/signin', '/signup']
+  const authRequired = !publicPages.includes(to.path)
+
+  // We wrap the auth check in a promise to ensure Firebase has initialized
+  const getCurrentUser = () => {
+    return new Promise((resolve) => {
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        unsubscribe();
+        resolve(user);
+      });
+    });
+  };
+
+  const user = await getCurrentUser();
+
+  if (authRequired && !user) {
+    return next('/signin');
+  }
+
+  if (!authRequired && user) {
+    return next('/');
+  }
+
+  next();
 })
