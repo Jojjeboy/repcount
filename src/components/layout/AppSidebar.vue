@@ -21,29 +21,18 @@
       ]"
     >
       <router-link to="/">
-        <img
+        <span
           v-if="isExpanded || isHovered || isMobileOpen"
-          class="dark:hidden"
-          src="/images/logo/logo.svg"
-          alt="Logo"
-          width="150"
-          height="40"
-        />
-        <img
-          v-if="isExpanded || isHovered || isMobileOpen"
-          class="hidden dark:block"
-          src="/images/logo/logo-dark.svg"
-          alt="Logo"
-          width="150"
-          height="40"
-        />
-        <img
+          class="text-xl font-bold text-gray-800 dark:text-white"
+        >
+          {{ t('brand.name') }}
+        </span>
+        <span
           v-else
-          src="/images/logo/logo-icon.svg"
-          alt="Logo"
-          width="32"
-          height="32"
-        />
+          class="text-xl font-bold text-gray-800 dark:text-white"
+        >
+          W
+        </span>
       </router-link>
     </div>
     <div
@@ -207,7 +196,6 @@
           </div>
         </div>
       </nav>
-      <SidebarWidget v-if="isExpanded || isHovered || isMobileOpen" />
     </div>
   </aside>
 </template>
@@ -219,19 +207,9 @@ import { useI18n } from "vue-i18n";
 
 import {
   GridIcon,
-  CalenderIcon,
-  UserCircleIcon,
-  SettingsIcon,
-  PieChartIcon,
   ChevronDownIcon,
   HorizontalDots,
-  PageIcon,
-  TableIcon,
-  ListIcon,
-  PlugInIcon,
 } from "../../icons";
-import SidebarWidget from "./SidebarWidget.vue";
-import BoxCubeIcon from "@/icons/BoxCubeIcon.vue";
 import { useSidebar } from "@/composables/useSidebar";
 
 const route = useRoute();
@@ -263,81 +241,46 @@ const menuGroups = computed<MenuGroup[]>(() => [
   {
     title: t("sidebar.groups.menu"),
     items: [
+    {
+        icon: GridIcon,
+        name: t("sidebar.items.landing"),
+        path:  "/",
+      },
       {
         icon: GridIcon,
-        name: t("sidebar.items.dashboard"),
-        subItems: [{ name: t("sidebar.sub_items.ecommerce"), path: "/", pro: false }],
-      },
-      {
-        icon: CalenderIcon,
-        name: t("sidebar.items.calendar"),
-        path: "/calendar",
-      },
-      {
-        icon: UserCircleIcon,
-        name: t("sidebar.items.profile"),
-        path: "/profile",
-      },
-      {
-        icon: SettingsIcon,
-        name: t("sidebar.items.settings"),
-        path: "/settings",
-      },
-      {
-        name: t("sidebar.items.forms"),
-        icon: ListIcon,
+        name: t("sidebar.items.example"),
         subItems: [
-          { name: t("sidebar.sub_items.form_elements"), path: "/form-elements", pro: false },
-        ],
-      },
-      {
-        name: t("sidebar.items.tables"),
-        icon: TableIcon,
-        subItems: [{ name: t("sidebar.sub_items.basic_tables"), path: "/basic-tables", pro: false }],
-      },
-      {
-        name: t("sidebar.items.pages"),
-        icon: PageIcon,
-        subItems: [
+          {
+            name: t("sidebar.sub_items.ecommerce"),
+            path: "/ecommerce",
+            pro: false
+          },
+          {
+            name: t("sidebar.sub_items.calendar"),
+            path: "/calendar",
+            pro: false
+          },
+          {
+            name: t("sidebar.sub_items.form_elements"),
+            path: "/form-elements",
+            pro: false
+          },
+          { name: t("sidebar.sub_items.basic_tables"), path: "/basic-tables", pro: false },
           { name: t("sidebar.sub_items.blank_page"), path: "/blank", pro: false },
           { name: t("sidebar.sub_items.error_404"), path: "/error-404", pro: false },
-        ],
-      },
-    ],
-  },
-  {
-    title: t("sidebar.groups.others"),
-    items: [
-      {
-        icon: PieChartIcon,
-        name: t("sidebar.items.charts"),
-        subItems: [
           { name: t("sidebar.sub_items.line_chart"), path: "/line-chart", pro: false },
           { name: t("sidebar.sub_items.bar_chart"), path: "/bar-chart", pro: false },
-        ],
-      },
-      {
-        icon: BoxCubeIcon,
-        name: t("sidebar.items.ui_elements"),
-        subItems: [
           { name: t("sidebar.sub_items.alerts"), path: "/alerts", pro: false },
           { name: t("sidebar.sub_items.avatars"), path: "/avatars", pro: false },
           { name: t("sidebar.sub_items.badge"), path: "/badge", pro: false },
           { name: t("sidebar.sub_items.buttons"), path: "/buttons", pro: false },
           { name: t("sidebar.sub_items.images"), path: "/images", pro: false },
           { name: t("sidebar.sub_items.videos"), path: "/videos", pro: false },
-        ],
-      },
-      {
-        icon: PlugInIcon,
-        name: t("sidebar.items.authentication"),
-        subItems: [
-          { name: t("sidebar.sub_items.signin"), path: "/signin", pro: false },
-          { name: t("sidebar.sub_items.signup"), path: "/signup", pro: false },
+          { name: t("sidebar.sub_items.profile"), path: "/profile", pro: false }
         ],
       },
     ],
-  },
+  }
 ]);
 
 const isActive = (path: string) => route.path === path;

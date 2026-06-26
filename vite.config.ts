@@ -14,9 +14,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'apple-touch-icon.png', 'masked-icon.svg'],
         manifest: {
-        name: 'PushIt',
-        short_name: 'PushIt',
-        description: 'Advanced Tally Counter PWA',
+        name: 'Boiler Admin',
+        short_name: 'Boiler Admin',
+        description: 'Boiler Admin Admin Dashboard',
         theme_color: '#0a0a0f',
         icons: [
           {

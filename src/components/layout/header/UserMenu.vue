@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { UserCircleIcon, ChevronDownIcon, LogoutIcon, SettingsIcon, InfoCircleIcon } from '@/icons'
+import { ChevronDownIcon, LogoutIcon, SettingsIcon } from '@/icons'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { signOut } from 'firebase/auth'

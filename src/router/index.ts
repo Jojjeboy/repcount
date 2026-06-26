@@ -10,6 +10,14 @@ const router = createRouter({
   routes: [
     {
       path: '/',
+      name: 'Landing',
+      component: () => import('../views/Landing.vue'),
+      meta: {
+        title: 'Landing Page',
+      },
+    },
+    {
+      path: '/ecommerce',
       name: 'Ecommerce',
       component: () => import('../views/Ecommerce.vue'),
       meta: {
@@ -148,7 +156,7 @@ const router = createRouter({
 export default router
 
 router.beforeEach(async (to, from, next) => {
-  document.title = `Vue.js ${to.meta.title} | TailAdmin - Vue.js Tailwind CSS Dashboard Template`
+  document.title = `Vue.js ${to.meta.title} | Boiler Admin - Vue.js Tailwind CSS Dashboard Template`
 
   const publicPages = ['/signin']
   const authRequired = !publicPages.includes(to.path)

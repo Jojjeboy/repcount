@@ -14,7 +14,7 @@
     "signin_error": "Kunde inte logga in med Google. Försök igen."
   },
   "brand": {
-    "name": "Boiler-Admin",
+    "name": "workoutcount",
     "description": "Gratis och öppen källkod Tailwind CSS Admin Dashboard-mall"
   },
   "user": {
@@ -30,8 +30,8 @@
       "others": "Övrigt"
     },
     "items": {
-      "dashboard": "Instrumentpanel",
-      "calendar": "Kalender",
+      "landing": "Landningssida",
+      "example": "Exempel",
       "profile": "Användarprofil",
       "settings": "Inställningar",
       "forms": "Formulär",
@@ -43,6 +43,7 @@
     },
     "sub_items": {
       "ecommerce": "E-handel",
+      "calendar": "Kalender",
       "form_elements": "Formulärelement",
       "basic_tables": "Grundläggande tabeller",
       "blank_page": "Blank sida",

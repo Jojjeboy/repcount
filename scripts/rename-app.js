@@ -1,33 +1,21 @@
 /**
  * App Rename Script
  *
- * Renames the app from its current "boiler" identity to a new name.
+ * Renames the app from its current "TailAdmin" identity to a new name.
  *
  * Usage:
- *   node scripts/rename-app.js <new-name>
- *
- * Examples:
- *   node scripts/rename-app.js my-app
- *   node scripts/rename-app.js "My Awesome App"
- *
- * What it updates:
- *   - package.json            -> "name" field (kebab-cased slug)
- *   - index.html              -> <title> tag
- *   - vite.config.ts          -> PWA manifest name, short_name, description; base path
- *   - src/views/LoginView.vue -> <h1> heading and description paragraph
+ *   node scripts/rename-app.js "New App Name"
  */
 
 import fs from 'fs'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import readline from 'readline'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT = path.resolve(__dirname, '..')
 
 // --- Name derivations --------------------------------------------------------
 
-/** "my awesome app" -> "my-awesome-app"  (safe npm package name / URL segment) */
 function toSlug(name) {
   return name
     .trim()
@@ -36,15 +24,6 @@ function toSlug(name) {
     .replace(/^-+|-+$/g, '')
 }
 
-/** "my-awesome-app" -> "MyAwesomeApp"  (PascalCase, used for PWA short_name) */
-function toPascalCase(slug) {
-  return slug
-    .split('-')
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-    .join('')
-}
-
-/** "my-awesome-app" -> "My Awesome App"  (Title Case, used for display names) */
 function toTitleCase(slug) {
   return slug
     .split('-')
@@ -67,13 +46,10 @@ function writeFile(relPath, content) {
   fs.writeFileSync(path.join(ROOT, relPath), content, 'utf-8')
 }
 
-/** Replace the first occurrence of a literal string. Warns if not found. */
-function replaceLiteral(content, from, to, description) {
-  if (!content.includes(from)) {
-    console.warn(`  Could not find "${from}" (${description}) - skipping`)
-    return content
-  }
-  return content.replace(from, to)
+/** Global case-insensitive replacement */
+function globalReplace(content, from, to) {
+  const regex = new RegExp(from, 'gi')
+  return content.replace(regex, to)
 }
 
 // --- Individual file updaters -------------------------------------------------
@@ -90,115 +66,87 @@ function updatePackageJson(slug) {
   console.log(`  package.json       "name": "${oldName}" -> "${slug}"`)
 }
 
-function updateIndexHtml(titleCase) {
+function updateIndexHtml(newName) {
   const rel = 'index.html'
   let content = readFile(rel)
   if (!content) return
 
-  content = replaceLiteral(content, 'Vue Firebase Boilerplate', titleCase, '<title> tag')
+  content = globalReplace(content, 'TailAdmin', newName)
   writeFile(rel, content)
-  console.log(`  index.html         <title> -> "${titleCase}"`)
+  console.log(`  index.html         Updated title tag`)
 }
 
-function updateViteConfig(titleCase, pascalCase, slug) {
+function updateRouterIndex(newName) {
+  const rel = 'src/router/index.ts'
+  let content = readFile(rel)
+  if (!content) return
+
+  content = globalReplace(content, 'TailAdmin', newName)
+  writeFile(rel, content)
+  console.log(`  src/router/index.ts Updated document.title`)
+}
+
+function updateFourZeroFour(newName) {
+  const rel = 'src/views/Errors/FourZeroFour.vue'
+  let content = readFile(rel)
+  if (!content) return
+
+  content = globalReplace(content, 'TailAdmin', newName)
+  writeFile(rel, content)
+  console.log(`  FourZeroFour.vue    Updated copyright footer`)
+}
+
+function updateViteConfig(newName) {
   const rel = 'vite.config.ts'
   let content = readFile(rel)
   if (!content) return
 
-  content = replaceLiteral(
-    content,
-    "'Vue Firebase Boilerplate'",
-    "'" + titleCase + "'",
-    'PWA manifest name',
-  )
-  content = replaceLiteral(
-    content,
-    "'VueBoiler'",
-    "'" + pascalCase + "'",
-    'PWA manifest short_name',
-  )
-  content = replaceLiteral(
-    content,
-    "'A minimalist Vue 3 Boilerplate with Firebase Auth'",
-    "'" + titleCase + "'",
-    'PWA manifest description',
-  )
-  content = replaceLiteral(content, "base: '/boiler/'", "base: '/" + slug + "/'", 'Vite base path')
+  // Replace "PushIt" and the specific description found in the file
+  content = globalReplace(content, 'PushIt', newName)
+  content = globalReplace(content, 'Advanced Tally Counter PWA', `${newName} Admin Dashboard`)
+
   writeFile(rel, content)
-  console.log(
-    `  vite.config.ts     PWA name -> "${titleCase}", short_name -> "${pascalCase}", base -> "/${slug}/"`,
-  )
+  console.log(`  vite.config.ts     Updated PWA manifest`)
 }
 
-function updateLoginView(titleCase) {
-  const rel = 'src/views/LoginView.vue'
+function updateReadme(newName) {
+  const rel = 'README.md'
   let content = readFile(rel)
   if (!content) return
 
-  content = replaceLiteral(content, 'Boilerplate App', titleCase, '<h1> heading')
-  content = replaceLiteral(
-    content,
-    'This is a minimal boilerplate application using Vue 3 and Firebase Authentication. It\n        contains no complex UI frameworks, just clean CSS and functional structure.',
-    `This is ${titleCase}, built with Vue 3 and Firebase Authentication.`,
-    'description paragraph',
-  )
+  content = globalReplace(content, 'TailAdmin', newName)
   writeFile(rel, content)
-  console.log(`  LoginView.vue      <h1> -> "${titleCase}"`)
-}
-
-// --- Confirmation prompt ------------------------------------------------------
-
-function confirm(question) {
-  const rl = readline.createInterface({ input: process.stdin, output: process.stdout })
-  return new Promise((resolve) => {
-    rl.question(question, (answer) => {
-      rl.close()
-      resolve(answer.trim().toLowerCase())
-    })
-  })
+  console.log(`  README.md          Global replacement of app name`)
 }
 
 // --- Main --------------------------------------------------------------------
 
-async function main() {
+function main() {
   const rawName = process.argv[2]
 
   if (!rawName) {
-    console.error('Usage: node scripts/rename-app.js <new-name>')
-    console.error('Example: node scripts/rename-app.js my-app')
+    console.error('Usage: node scripts/rename-app.js "New App Name"')
+    console.error('Example: node scripts/rename-app.js "Boiler Admin"')
     process.exit(1)
   }
 
   const slug = toSlug(rawName)
   const titleCase = toTitleCase(slug)
-  const pascalCase = toPascalCase(slug)
-
-  if (!slug) {
-    console.error(`"${rawName}" produced an empty slug. Use letters, numbers, or hyphens.`)
-    process.exit(1)
-  }
 
   console.log('\nRename plan:')
   console.log(`  Input name  : ${rawName}`)
   console.log(`  Slug        : ${slug}`)
   console.log(`  Title case  : ${titleCase}`)
-  console.log(`  Pascal case : ${pascalCase}`)
-  console.log('\nFiles to be updated:')
-  console.log('  package.json, index.html, vite.config.ts, src/views/LoginView.vue')
-
-  const answer = await confirm('\nProceed? [y/N] ')
-  if (answer !== 'y' && answer !== 'yes') {
-    console.log('Aborted.')
-    process.exit(0)
-  }
-
   console.log('\nApplying changes...')
+
   updatePackageJson(slug)
   updateIndexHtml(titleCase)
-  updateViteConfig(titleCase, pascalCase, slug)
-  updateLoginView(titleCase)
+  updateRouterIndex(titleCase)
+  updateFourZeroFour(titleCase)
+  updateViteConfig(titleCase)
+  updateReadme(titleCase)
 
-  console.log('\nDone! Run `npm install` to update package-lock.json.')
+  console.log('\nDone! Run `npm install` to update package-lock.json if necessary.')
 }
 
 main()

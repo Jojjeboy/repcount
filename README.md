@@ -1,19 +1,19 @@
-# TailAdmin Vue - Free Vue.js Tailwind CSS Admin Dashboard Template
+# Boiler Admin Vue - Free Vue.js Tailwind CSS Admin Dashboard Template
 
-TailAdmin Vue is a free, open-source admin dashboard template **built on Vue.js**, popular and progressive JavaScript
+Boiler Admin Vue is a free, open-source admin dashboard template **built on Vue.js**, popular and progressive JavaScript
 framework, and **Tailwind CSS**. This **powerful combination** provides developers with an extensive library of
 essential components, elements, and pages to launch a comprehensive and data-centric back-end, dashboard, or admin panel
 solution for any Vue.js based web projects.
 
-![TailAdmin Vue.js Dashboard Preview](./banner.png)
+![Boiler Admin Vue.js Dashboard Preview](./banner.png)
 
-With TailAdmin Vue, you can leverage **Vue.js 3** features such as declarative rendering, component-based architecture,
+With Boiler Admin Vue, you can leverage **Vue.js 3** features such as declarative rendering, component-based architecture,
 Vue Router for routing, and Pinia for state management. It also utilizes the power of Tailwind CSS for rapid UI
 development with its low-level utility classes and responsive design capabilities.
 
 ## Overview
 
-TailAdmin provides essential UI components and layouts for building feature-rich, data-driven admin dashboards and control panels. It's built on:
+Boiler Admin provides essential UI components and layouts for building feature-rich, data-driven admin dashboards and control panels. It's built on:
 
 - Vue 3.x (Vite)
 - Tailwind CSS 4.x
@@ -21,29 +21,29 @@ TailAdmin provides essential UI components and layouts for building feature-rich
 
 ### Quick Links
 
-- [✨ Visit Website](https://tailadmin.com)
-- [📄 Documentation](https://tailadmin.com/docs)
-- [⬇️ Download](https://tailadmin.com/download)
+- [✨ Visit Website](https://Boiler Admin.com)
+- [📄 Documentation](https://Boiler Admin.com/docs)
+- [⬇️ Download](https://Boiler Admin.com/download)
 - [🖌️ Figma Design File (Community Edition)](https://www.figma.com/community/file/1463141366275764364)
-- [⚡ Get PRO Version](https://tailadmin.com/pricing)
+- [⚡ Get PRO Version](https://Boiler Admin.com/pricing)
 
 ### Demos
 
-- [Free Version](https://free-vue-demo.tailadmin.com/)
-- [Pro Version](https://vue-demo.tailadmin.com)
+- [Free Version](https://free-vue-demo.Boiler Admin.com/)
+- [Pro Version](https://vue-demo.Boiler Admin.com)
 
 ### Other Versions
 
-- [HTML Version](https://github.com/TailAdmin/tailadmin-free-tailwind-dashboard-template)
-- [Next.js Version](https://github.com/TailAdmin/free-nextjs-admin-dashboard)
-- [React Version](https://github.com/TailAdmin/free-react-tailwind-admin-dashboard)
-- [Angular Version](https://github.com/TailAdmin/free-angular-tailwind-dashboard)
+- [HTML Version](https://github.com/Boiler Admin/Boiler Admin-free-tailwind-dashboard-template)
+- [Next.js Version](https://github.com/Boiler Admin/free-nextjs-admin-dashboard)
+- [React Version](https://github.com/Boiler Admin/free-react-tailwind-admin-dashboard)
+- [Angular Version](https://github.com/Boiler Admin/free-angular-tailwind-dashboard)
 
 ## Installation
 
 ### Prerequisites
 
-To get started with TailAdmin, ensure you have the following prerequisites installed and set up:
+To get started with Boiler Admin, ensure you have the following prerequisites installed and set up:
 
 - Node.js 18.x or later (recommended to use Node.js 20.x or later)
 - Recommended IDE Setup: [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
@@ -57,7 +57,7 @@ TypeScript cannot handle type information for `.vue` imports by default, so we r
 Clone the repository using the following command:
 
 ```bash
-git clone https://github.com/TailAdmin/vue-tailwind-admin-dashboard.git
+git clone https://github.com/Boiler Admin/vue-tailwind-admin-dashboard.git
 ```
 
 > Windows Users: place the repository near the root of your drive if you face issues while cloning.
@@ -101,11 +101,11 @@ git clone https://github.com/TailAdmin/vue-tailwind-admin-dashboard.git
 - Complete Figma design file
 - Email support
 
-To learn more about pro version features and pricing, visit our [pricing page](https://tailadmin.com/pricing).
+To learn more about pro version features and pricing, visit our [pricing page](https://Boiler Admin.com/pricing).
 
 ## Components
 
-TailAdmin is a pre-designed starting point for building a web-based dashboard using Vue.js and Tailwind CSS. The template includes:
+Boiler Admin is a pre-designed starting point for building a web-based dashboard using Vue.js and Tailwind CSS. The template includes:
 
 - Sophisticated and accessible sidebar
 - Data visualization components
@@ -144,7 +144,7 @@ Easily integrate interactive vector maps with JSVectorMap.
 Frontend UI built on the powerful and versatile Tailwind CSS framework.
 
 **💫 TypeScript Support:**
-Write safer, maintainable code with TailAdmin Vue's TypeScript Support.
+Write safer, maintainable code with Boiler Admin Vue's TypeScript Support.
 
 **✅ Linting and Formatting:**
 Maintain a clean codebase with built-in linting and formatting.
@@ -212,7 +212,7 @@ Major update with Vue 3 migration and comprehensive redesign.
 - Modified routing implementation
 - Updated component APIs for Vue 3 compatibility
 
-[Read more](https://tailadmin.com/docs/update-logs/vue) on this release.
+[Read more](https://Boiler Admin.com/docs/update-logs/vue) on this release.
 
 ### Version 1.0.2 - [June 19, 2024]
 
@@ -231,4 +231,4 @@ Major update with Vue 3 migration and comprehensive redesign.
 
 ### Version 1.0.0 - Initial Release - [Jan 22, 2024]
 
-- Initial release of TailAdmin Vue.
+- Initial release of Boiler Admin Vue.
