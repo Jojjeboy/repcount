@@ -76,7 +76,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { signInWithPopup } from 'firebase/auth'
 import { auth, googleProvider } from '@/firebase'
@@ -84,14 +83,7 @@ import CommonGridShape from '@/components/common/CommonGridShape.vue'
 import FullScreenLayout from '@/components/layout/FullScreenLayout.vue'
 
 const router = useRouter()
-const email = ref('')
-const password = ref('')
-const showPassword = ref(false)
-const keepLoggedIn = ref(false)
 
-const togglePasswordVisibility = () => {
-  showPassword.value = !showPassword.value
-}
 
 const signInWithGoogle = async () => {
   try {
@@ -103,14 +95,6 @@ const signInWithGoogle = async () => {
   }
 }
 
-const handleSubmit = () => {
-  // Handle form submission
-  console.log('Form submitted', {
-    email: email.value,
-    password: password.value,
-    keepLoggedIn: keepLoggedIn.value,
-  })
-}
 </script>
 <style scoped>
 h2 {
