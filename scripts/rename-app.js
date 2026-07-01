@@ -1,7 +1,7 @@
 /**
  * App Rename Script
  *
- * Renames the app from its current "TailAdmin" identity to a new name.
+ * Renames the app from its current "Boiler Admin" identity to a new name.
  *
  * Usage:
  *   node scripts/rename-app.js "New App Name"
@@ -71,7 +71,8 @@ function updateIndexHtml(newName) {
   let content = readFile(rel)
   if (!content) return
 
-  content = globalReplace(content, 'TailAdmin', newName)
+  content = globalReplace(content, 'Boiler Admin', newName)
+  content = globalReplace(content, 'Boiler-Admin', newName)
   writeFile(rel, content)
   console.log(`  index.html         Updated title tag`)
 }
@@ -81,7 +82,8 @@ function updateRouterIndex(newName) {
   let content = readFile(rel)
   if (!content) return
 
-  content = globalReplace(content, 'TailAdmin', newName)
+  content = globalReplace(content, 'Boiler Admin', newName)
+  content = globalReplace(content, 'Boiler-Admin', newName)
   writeFile(rel, content)
   console.log(`  src/router/index.ts Updated document.title`)
 }
@@ -91,7 +93,8 @@ function updateFourZeroFour(newName) {
   let content = readFile(rel)
   if (!content) return
 
-  content = globalReplace(content, 'TailAdmin', newName)
+  content = globalReplace(content, 'Boiler Admin', newName)
+  content = globalReplace(content, 'Boiler-Admin', newName)
   writeFile(rel, content)
   console.log(`  FourZeroFour.vue    Updated copyright footer`)
 }
@@ -101,8 +104,9 @@ function updateViteConfig(newName) {
   let content = readFile(rel)
   if (!content) return
 
-  // Replace "PushIt" and the specific description found in the file
   content = globalReplace(content, 'PushIt', newName)
+  content = globalReplace(content, 'Boiler Admin', newName)
+  content = globalReplace(content, 'Boiler-Admin', newName)
   content = globalReplace(content, 'Advanced Tally Counter PWA', `${newName} Admin Dashboard`)
 
   writeFile(rel, content)
@@ -114,9 +118,21 @@ function updateReadme(newName) {
   let content = readFile(rel)
   if (!content) return
 
-  content = globalReplace(content, 'TailAdmin', newName)
+  content = globalReplace(content, 'Boiler Admin', newName)
+  content = globalReplace(content, 'Boiler-Admin', newName)
   writeFile(rel, content)
   console.log(`  README.md          Global replacement of app name`)
+}
+
+function updateBoilerMd(newName) {
+  const rel = 'use-this-as-boiler.md'
+  let content = readFile(rel)
+  if (!content) return
+
+  content = globalReplace(content, 'Boiler Admin', newName)
+  content = globalReplace(content, 'Boiler-Admin', newName)
+  writeFile(rel, content)
+  console.log(`  use-this-as-boiler.md Updated template info`)
 }
 
 // --- Main --------------------------------------------------------------------
@@ -145,6 +161,7 @@ function main() {
   updateFourZeroFour(titleCase)
   updateViteConfig(titleCase)
   updateReadme(titleCase)
+  updateBoilerMd(titleCase)
 
   console.log('\nDone! Run `npm install` to update package-lock.json if necessary.')
 }
