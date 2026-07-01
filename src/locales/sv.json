@@ -14,7 +14,7 @@
     "signin_error": "Kunde inte logga in med Google. Försök igen."
   },
   "brand": {
-    "name": "Workout Count",
+    "name": "RepCount",
     "description": "Gratis och öppen källkod Tailwind CSS Admin Dashboard-mall"
   },
   "user": {

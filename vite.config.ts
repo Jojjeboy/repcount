@@ -14,9 +14,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logo.png', 'apple-touch-icon.png', 'masked-icon.svg'],
         manifest: {
-        name: 'workoutcount',
-        short_name: 'workoutcount',
-        description: 'workoutcount Admin Dashboard',
+        name: 'RepCount',
+        short_name: 'RepCount',
+        description: 'RepCount Admin Dashboard',
         theme_color: '#0f1929',
         icons: [
           {
@@ -33,7 +33,7 @@ export default defineConfig({
       },
     }),
   ],
-  base: '/boiler-admin/',
+  base: '/repcount/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

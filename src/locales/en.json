@@ -14,7 +14,7 @@
     "signin_error": "Failed to sign in with Google. Please try again."
   },
   "brand": {
-    "name": "workoutcount",
+    "name": "RepCount",
     "description": "Free and Open-Source Tailwind CSS Admin Dashboard Template"
   },
   "user": {
