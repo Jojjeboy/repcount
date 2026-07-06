@@ -12,6 +12,9 @@ export default defineConfig({
     vueJsx(),
     VitePWA({
       registerType: 'autoUpdate',
+      workbox: {
+        maximumFileSizeToCacheInBytes: 4 * 1024 * 1024,
+      },
       includeAssets: ['logo.png', 'apple-touch-icon.png', 'masked-icon.svg'],
         manifest: {
         name: 'RepCount',
