@@ -10,56 +10,58 @@
           Start
         </h3>
 
-        <ComponentCard title="My Tallies">
-          <!-- Tally List: Rendered when tallies exist -->
-          <div v-if="tallies.length > 0" class="flex flex-col gap-3">
-            <TallyItem
-              v-for="tally in tallies"
-              :key="tally.uuid"
-              :tally="tally"
-              :is-expanded="selectedTallyId === tally.uuid"
-              @toggle-expand="selectedTallyId = selectedTallyId === tally.uuid ? null : tally.uuid"
-              @change-value="(amount) => changeValue(tally, amount)"
-              @edit="editTally"
-              @toggle-active="toggleActive"
-              @remove="removeTally"
-            />
+        <ComponentCard :title="$t('tallies.my_tallies')">
+          <!-- Quick Actions: Always available -->
+          <div class="flex gap-3 mb-6">
+            <button
+              @click="showExamples = true; showForm = false"
+              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              {{ $t('tallies.add_example') }}
+            </button>
+            <button
+              @click="showForm = true; showExamples = false"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+            >
+              {{ $t('tallies.create_new') }}
+            </button>
           </div>
 
-          <!-- Empty State: Shown when no tallies are present and no form/examples are open -->
-          <div v-else-if="!showExamples && !showForm" class="flex flex-col items-center gap-4 py-6">
-            <p class="text-gray-500 dark:text-gray-400">No tallies saved yet. Get started by adding one!</p>
-            <div class="flex gap-3">
-              <button
-                @click="showExamples = true"
-                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Add example
-              </button>
-              <button
-                @click="showForm = true"
-                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
-              >
-                Create new
-              </button>
-            </div>
-          </div>
-
-          <!-- Example Selection: Grid of pre-defined tallies -->
+          <!-- Example Selection: Shown when showExamples is true -->
           <TallyExamples
-            v-else-if="showExamples"
-            :examples="(exampleData.data as Tally[])"
+            v-if="showExamples"
+            :examples="examplesWithStatus"
             @select="addExample"
             @cancel="showExamples = false"
           />
 
-          <!-- Create/Edit Form: Input fields for tally configuration -->
+          <!-- Create/Edit Form: Shown when showForm is true -->
           <TallyForm
             v-else-if="showForm"
             :initial-data="editingTally"
             @submit="submitTally"
             @cancel="cancelForm"
           />
+
+          <!-- Main Content: Tally List or Empty State -->
+          <div v-else>
+            <div v-if="tallies.length > 0" class="flex flex-col gap-3">
+              <TallyItem
+                v-for="tally in tallies"
+                :key="tally.uuid"
+                :tally="tally"
+                :is-expanded="selectedTallyId === tally.uuid"
+                @toggle-expand="selectedTallyId = selectedTallyId === tally.uuid ? null : tally.uuid"
+                @change-value="(amount) => changeValue(tally, amount)"
+                @edit="editTally"
+                @toggle-active="toggleActive"
+                @remove="removeTally"
+              />
+            </div>
+            <div v-else class="flex flex-col items-center gap-4 py-6">
+              <p class="text-gray-500 dark:text-gray-400">{{ $t('tallies.no_tallies') }}</p>
+            </div>
+          </div>
         </ComponentCard>
       </div>
     </div>
@@ -67,7 +69,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import ComponentCard from "@/components/common/ComponentCard.vue";
 import { useTallies, type Tally } from "@/composables/useTallies";
@@ -87,6 +89,18 @@ const selectedTallyId = ref<string | null>(null);
 const showExamples = ref(false);
 const showForm = ref(false);
 const editingTally = ref<Tally | null>(null);
+
+/**
+ * Maps all examples and marks whether they have already been added to the user's collection.
+ * Comparison is based on the tally title.
+ */
+const examplesWithStatus = computed(() => {
+  const userTallyTitles = tallies.value.map(t => t.title.toLowerCase());
+  return (exampleData.data as Tally[]).map(example => ({
+    ...example,
+    isAdded: userTallyTitles.includes(example.title.toLowerCase())
+  }));
+});
 
 /**
  * LIFECYCLE

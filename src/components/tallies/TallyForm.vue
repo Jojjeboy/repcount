@@ -2,106 +2,106 @@
   <div class="flex flex-col gap-4 py-4 text-left">
     <div class="flex justify-between items-center mb-2">
       <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-400">
-        {{ isEditing ? 'Edit Tally' : 'Create New Tally' }}
+        {{ isEditing ? $t('tallies.edit_tally') : $t('tallies.create_new_tally') }}
       </h4>
       <button
         @click="$emit('cancel')"
         class="text-xs text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
       >
-        Cancel
+        {{ $t('tallies.cancel') }}
       </button>
     </div>
 
     <form @submit.prevent="handleSubmit" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-      <!-- Tally Title -->
-      <div class="sm:col-span-2">
-        <label class="block text-xs font-medium text-gray-500 mb-1">Title</label>
-        <input
-          v-model="localForm.title"
-          type="text"
-          required
-          class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
-          placeholder="e.g. Daily Pushups"
-        />
-      </div>
+       <!-- Tally Title -->
+       <div class="sm:col-span-2">
+         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('tallies.title') }}</label>
+         <input
+           v-model="localForm.title"
+           type="text"
+           required
+           class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
+           :placeholder="$t('tallies.title_placeholder')"
+         />
+       </div>
 
-      <!-- Increment Value -->
-      <div>
-        <label class="block text-xs font-medium text-gray-500 mb-1">Increase By</label>
-        <input
-          v-model.number="localForm.increseBy"
-          type="number"
-          required
-          class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
-        />
-      </div>
+       <!-- Increment Value -->
+       <div>
+         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('tallies.increase_by') }}</label>
+         <input
+           v-model.number="localForm.increseBy"
+           type="number"
+           required
+           class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
+         />
+       </div>
 
-      <!-- Decrement Value -->
-      <div>
-        <label class="block text-xs font-medium text-gray-500 mb-1">Decrease By</label>
-        <input
-          v-model.number="localForm.decreseBy"
-          type="number"
-          required
-          class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
-        />
-      </div>
+       <!-- Decrement Value -->
+       <div>
+         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('tallies.decrease_by') }}</label>
+         <input
+           v-model.number="localForm.decreseBy"
+           type="number"
+           required
+           class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
+         />
+       </div>
 
-      <!-- Goal Value -->
-      <div>
-        <label class="block text-xs font-medium text-gray-500 mb-1">Goal</label>
-        <input
-          v-model.number="localForm.goal"
-          type="number"
-          required
-          class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
-        />
-      </div>
+       <!-- Goal Value -->
+       <div>
+         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('tallies.goal') }}</label>
+         <input
+           v-model.number="localForm.goal"
+           type="number"
+           required
+           class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
+         />
+       </div>
 
-      <!-- Color Picker -->
-      <div>
-        <label class="block text-xs font-medium text-gray-500 mb-1">Color</label>
-        <input
-          v-model="localForm.color"
-          type="color"
-          required
-          class="w-full h-9 px-1 py-1 border rounded-lg dark:bg-white/[0.03] dark:border-gray-700"
-        />
-      </div>
+       <!-- Color Picker -->
+       <div>
+         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('tallies.color') }}</label>
+         <input
+           v-model="localForm.color"
+           type="color"
+           required
+           class="w-full h-9 px-1 py-1 border rounded-lg dark:bg-white/[0.03] dark:border-gray-700"
+         />
+       </div>
 
-      <!-- Auto Reset Toggle -->
-      <div class="flex items-center gap-2">
-        <input
-          v-model="localForm.reset"
-          type="checkbox"
-          id="reset"
-          class="rounded border-gray-300 text-blue-600"
-        />
-        <label for="reset" class="text-xs font-medium text-gray-500">Auto Reset</label>
-      </div>
+       <!-- Auto Reset Toggle -->
+       <div class="flex items-center gap-2">
+         <input
+           v-model="localForm.reset"
+           type="checkbox"
+           id="reset"
+           class="rounded border-gray-300 text-blue-600"
+         />
+         <label for="reset" class="text-xs font-medium text-gray-500">{{ $t('tallies.auto_reset') }}</label>
+       </div>
 
-      <!-- Reset Interval (Conditional) -->
-      <div v-if="localForm.reset">
-        <label class="block text-xs font-medium text-gray-500 mb-1">Interval</label>
-        <select
-          v-model="localForm.resetInterval"
-          class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
-        >
-          <option value="daily">Daily</option>
-          <option value="weekly">Weekly</option>
-          <option value="monthly">Monthly</option>
-        </select>
-      </div>
+       <!-- Reset Interval (Conditional) -->
+       <div v-if="localForm.reset">
+         <label class="block text-xs font-medium text-gray-500 mb-1">{{ $t('tallies.interval') }}</label>
+         <select
+           v-model="localForm.resetInterval"
+           class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white"
+         >
+           <option value="daily">{{ $t('tallies.daily') }}</option>
+           <option value="weekly">{{ $t('tallies.weekly') }}</option>
+           <option value="monthly">{{ $t('tallies.monthly') }}</option>
+         </select>
+       </div>
 
-      <!-- Submit Button -->
-      <div class="sm:col-span-2 mt-2">
-        <button
-          type="submit"
-          class="w-full py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          {{ isEditing ? 'Update Tally' : 'Save Tally' }}
-        </button>
-      </div>
+       <!-- Submit Button -->
+       <div class="sm:col-span-2 mt-2">
+         <button
+           type="submit"
+           class="w-full py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+         >
+           {{ isEditing ? $t('tallies.update_tally') : $t('tallies.save_tally') }}
+         </button>
+       </div>
     </form>
   </div>
 </template>

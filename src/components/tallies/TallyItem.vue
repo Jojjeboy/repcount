@@ -48,28 +48,40 @@
       <!-- Stats Grid: High-level tally metrics -->
       <div class="grid grid-cols-3 gap-4 mb-6 p-3 rounded-lg bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-gray-800">
         <div class="text-center">
-          <p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Goal</p>
+          <p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">{{ $t('tallies.goal') }}</p>
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ tally.goal }}</p>
         </div>
         <div class="text-center border-x border-gray-200 dark:border-gray-800">
-          <p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Top Score</p>
+          <p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">{{ $t('tallies.top_score') }}</p>
           <p class="text-sm font-semibold text-gray-700 dark:text-gray-300">{{ tally.topScore }}</p>
         </div>
         <div class="text-center">
-          <p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">Status</p>
+          <p class="text-[10px] uppercase tracking-wider text-gray-400 dark:text-gray-500 mb-1">{{ $t('tallies.status') }}</p>
           <div class="flex items-center justify-center gap-1.5">
             <div :class="tally.active ? 'bg-green-500' : 'bg-red-500'" class="w-1.5 h-1.5 rounded-full"></div>
             <p class="text-xs font-semibold" :class="tally.active ? 'text-green-600 dark:text-green-400' : 'text-red-600 dark:text-red-400'">
-              {{ tally.active ? 'Active' : 'Inactive' }}
+              {{ tally.active ? $t('tallies.active') : $t('tallies.inactive') }}
             </p>
           </div>
         </div>
       </div>
 
-      <!-- History Log: List of previous values -->
+      <!-- History Log: Collapsible list of previous values -->
       <div class="mb-6">
-        <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 mb-2 uppercase tracking-wider">History</h4>
-        <div class="max-h-32 overflow-y-auto space-y-1 pr-1 custom-scrollbar">
+        <button
+          @click="showHistory = !showHistory"
+          class="flex items-center justify-between w-full mb-2 group"
+        >
+          <h4 class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            {{ $t('tallies.history') }}
+          </h4>
+          <ChevronDownIcon
+            class="w-3 h-3 text-gray-400 transition-transform duration-200 group-hover:text-gray-600 dark:group-hover:text-gray-200"
+            :class="{ 'rotate-180': showHistory }"
+          />
+        </button>
+
+        <div v-if="showHistory" class="max-h-32 overflow-y-auto space-y-1 pr-1 custom-scrollbar animate-in fade-in slide-in-from-top-1 duration-200">
           <div
             v-for="(entry, index) in tally.history.slice().reverse()"
             :key="index"
@@ -78,9 +90,9 @@
             <span class="text-gray-500 dark:text-gray-400">{{ entry.date }}</span>
             <span class="font-medium text-gray-700 dark:text-gray-300">{{ entry.value }}</span>
           </div>
-          <p v-if="tally.history.length === 0" class="text-xs text-gray-400 text-center py-2">
-            No history available
-          </p>
+           <p v-if="tally.history.length === 0" class="text-xs text-gray-400 text-center py-2">
+             {{ $t('tallies.no_history') }}
+           </p>
         </div>
       </div>
 
@@ -90,21 +102,21 @@
           @click="$emit('edit', tally)"
           class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 dark:text-gray-400 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] transition-colors"
         >
-          Edit
+          {{ $t('tallies.edit') }}
         </button>
         <div class="flex gap-2">
-          <button
-            @click="$emit('toggle-active', tally)"
-            class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 dark:text-gray-400 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] transition-colors"
-          >
-            {{ tally.active ? 'Deactivate' : 'Activate' }}
-          </button>
-          <button
-            @click="$emit('remove', tally.uuid)"
-            class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/30 transition-colors"
-          >
-            Remove
-          </button>
+           <button
+             @click="$emit('toggle-active', tally)"
+             class="px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-100 rounded-md hover:bg-gray-200 dark:text-gray-400 dark:bg-white/[0.05] dark:hover:bg-white/[0.1] transition-colors"
+           >
+             {{ tally.active ? $t('tallies.deactivate') : $t('tallies.activate') }}
+           </button>
+           <button
+             @click="$emit('remove', tally.uuid)"
+             class="px-3 py-1.5 text-xs font-medium text-red-600 bg-red-50 rounded-md hover:bg-red-100 dark:text-red-400 dark:bg-red-900/20 dark:hover:bg-red-900/30 transition-colors"
+           >
+             {{ $t('tallies.remove') }}
+           </button>
         </div>
       </div>
     </div>
@@ -112,6 +124,7 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 import ChevronDownIcon from "@/icons/ChevronDownIcon.vue";
 import type { Tally } from "@/composables/useTallies";
 
@@ -121,6 +134,8 @@ interface Props {
 }
 
 defineProps<Props>();
+
+const showHistory = ref(false);
 
 defineEmits<{
   'toggle-expand': [];
