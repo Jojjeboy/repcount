@@ -11,24 +11,22 @@
         </h3>
 
         <ComponentCard title="My Tallies">
-          <!-- Tally List -->
+          <!-- Tally List: Rendered when tallies exist -->
           <div v-if="tallies.length > 0" class="flex flex-col gap-3">
-            <div
+            <TallyItem
               v-for="tally in tallies"
               :key="tally.uuid"
-              class="flex items-center justify-between p-3 rounded-lg border border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-white/[0.02]"
-            >
-              <div class="flex items-center gap-3">
-                <div :style="{ backgroundColor: tally.color }" class="w-3 h-3 rounded-full"></div>
-                <span class="font-medium text-gray-700 dark:text-gray-300">{{ tally.title }}</span>
-              </div>
-              <div class="text-lg font-bold text-gray-800 dark:text-white">
-                {{ tally.value }}
-              </div>
-            </div>
+              :tally="tally"
+              :is-expanded="selectedTallyId === tally.uuid"
+              @toggle-expand="selectedTallyId = selectedTallyId === tally.uuid ? null : tally.uuid"
+              @change-value="(amount) => changeValue(tally, amount)"
+              @edit="editTally"
+              @toggle-active="toggleActive"
+              @remove="removeTally"
+            />
           </div>
 
-          <!-- Empty State -->
+          <!-- Empty State: Shown when no tallies are present and no form/examples are open -->
           <div v-else-if="!showExamples && !showForm" class="flex flex-col items-center gap-4 py-6">
             <p class="text-gray-500 dark:text-gray-400">No tallies saved yet. Get started by adding one!</p>
             <div class="flex gap-3">
@@ -47,70 +45,21 @@
             </div>
           </div>
 
-          <!-- Example Selection -->
-          <div v-else-if="showExamples" class="flex flex-col gap-4 py-4">
-            <div class="flex justify-between items-center mb-2">
-              <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-400">Quick Add Examples</h4>
-              <button @click="showExamples = false" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <button
-                v-for="example in exampleData.data"
-                :key="example.uuid"
-                @click="addExample(example as Tally)"
-                class="text-left px-3 py-2 text-sm border border-gray-200 dark:border-gray-700 rounded-md hover:bg-gray-50 dark:hover:bg-white/[0.05] transition-colors"
-              >
-                {{ example.title }}
-              </button>
-            </div>
-          </div>
+          <!-- Example Selection: Grid of pre-defined tallies -->
+          <TallyExamples
+            v-else-if="showExamples"
+            :examples="(exampleData.data as Tally[])"
+            @select="addExample"
+            @cancel="showExamples = false"
+          />
 
-          <!-- Create New Form -->
-          <div v-else-if="showForm" class="flex flex-col gap-4 py-4 text-left">
-            <div class="flex justify-between items-center mb-2">
-              <h4 class="text-sm font-semibold text-gray-600 dark:text-gray-400">Create New Tally</h4>
-              <button @click="showForm = false" class="text-xs text-gray-400 hover:text-gray-600">Cancel</button>
-            </div>
-            <form @submit.prevent="submitNewTally" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="sm:col-span-2">
-                <label class="block text-xs font-medium text-gray-500 mb-1">Title</label>
-                <input v-model="form.title" type="text" required class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">Increase By</label>
-                <input v-model.number="form.increseBy" type="number" required class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">Decrease By</label>
-                <input v-model.number="form.decreseBy" type="number" required class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">Goal</label>
-                <input v-model.number="form.goal" type="number" required class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white" />
-              </div>
-              <div>
-                <label class="block text-xs font-medium text-gray-500 mb-1">Color</label>
-                <input v-model="form.color" type="color" required class="w-full h-9 px-1 py-1 border rounded-lg dark:bg-white/[0.03] dark:border-gray-700" />
-              </div>
-              <div class="flex items-center gap-2">
-                <input v-model="form.reset" type="checkbox" id="reset" class="rounded border-gray-300 text-blue-600" />
-                <label for="reset" class="text-xs font-medium text-gray-500">Auto Reset</label>
-              </div>
-              <div v-if="form.reset">
-                <label class="block text-xs font-medium text-gray-500 mb-1">Interval</label>
-                <select v-model="form.resetInterval" class="w-full px-3 py-2 text-sm border rounded-lg dark:bg-white/[0.03] dark:border-gray-700 dark:text-white">
-                  <option value="daily">Daily</option>
-                  <option value="weekly">Weekly</option>
-                  <option value="monthly">Monthly</option>
-                </select>
-              </div>
-              <div class="sm:col-span-2 mt-2">
-                <button type="submit" class="w-full py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors">
-                  Save Tally
-                </button>
-              </div>
-            </form>
-          </div>
+          <!-- Create/Edit Form: Input fields for tally configuration -->
+          <TallyForm
+            v-else-if="showForm"
+            :initial-data="editingTally"
+            @submit="submitTally"
+            @cancel="cancelForm"
+          />
         </ComponentCard>
       </div>
     </div>
@@ -121,37 +70,46 @@
 import { ref, onMounted } from 'vue';
 import AdminLayout from "@/components/layout/AdminLayout.vue";
 import ComponentCard from "@/components/common/ComponentCard.vue";
-import { useTallies, type Tally, type TallyHistory } from "@/composables/useTallies";
+import { useTallies, type Tally } from "@/composables/useTallies";
 import exampleData from "@/example/example.data.json";
 
-const { tallies, getTallies, addTally } = useTallies();
+// Component Imports
+import TallyItem from "@/components/tallies/TallyItem.vue";
+import TallyForm from "@/components/tallies/TallyForm.vue";
+import TallyExamples from "@/components/tallies/TallyExamples.vue";
 
+const { tallies, getTallies, addTally, updateTally, deleteTally } = useTallies();
+
+/**
+ * STATE MANAGEMENT
+ */
+const selectedTallyId = ref<string | null>(null);
 const showExamples = ref(false);
 const showForm = ref(false);
+const editingTally = ref<Tally | null>(null);
 
-const form = ref({
-  title: '',
-  increseBy: 1,
-  decreseBy: 1,
-  reset: false,
-  resetInterval: 'daily' as 'daily' | 'weekly' | 'monthly' | null,
-  value: 0,
-  goal: 0,
-  topScore: 0,
-  active: true,
-  color: '#3B82F6',
-  history: [] as TallyHistory[]
-});
-
+/**
+ * LIFECYCLE
+ */
 onMounted(() => {
   getTallies();
 });
 
+/**
+ * ACTIONS
+ */
+
+/**
+ * Adds a pre-defined example tally to the user's collection.
+ * @param example The example tally object from the JSON data.
+ */
 async function addExample(example: Tally) {
   try {
+    // Remove the UUID from the example to let Firestore generate a new unique ID
     const tallyData = Object.fromEntries(
       Object.entries(example).filter(([key]) => key !== 'uuid')
     ) as Omit<Tally, 'uuid'>;
+
     await addTally(tallyData);
     showExamples.value = false;
   } catch (error) {
@@ -159,30 +117,93 @@ async function addExample(example: Tally) {
   }
 }
 
-async function submitNewTally() {
+/**
+ * Handles both creating a new tally and updating an existing one.
+ * @param data The form data containing tally configuration.
+ */
+async function submitTally(data: Partial<Tally>) {
   try {
-    await addTally({
-      ...form.value,
-      lastTouched: new Date().toISOString(),
-    });
-    showForm.value = false;
-    // Reset form
-    form.value = {
-      title: '',
-      increseBy: 1,
-      decreseBy: 1,
-      reset: false,
-      resetInterval: 'daily',
-      value: 0,
-      goal: 0,
-      topScore: 0,
-      active: true,
-      color: '#3B82F6',
-      history: []
-    };
+    if (editingTally.value) {
+      // Update existing tally
+      await updateTally(editingTally.value.uuid, data);
+    } else {
+      // Create new tally with current timestamp
+      await addTally({
+        ...data,
+        lastTouched: new Date().toISOString(),
+      } as Omit<Tally, 'uuid'>);
+    }
+    cancelForm();
   } catch (error) {
-    console.error("Failed to create tally:", error);
+    console.error("Failed to save tally:", error);
   }
+}
+
+/**
+ * Updates the current value of a tally, ensuring it doesn't drop below zero.
+ * Also updates the topScore if the new value is the highest achieved.
+ * @param tally The tally object to update.
+ * @param amount The amount to change (positive for increase, negative for decrease).
+ */
+async function changeValue(tally: Tally, amount: number) {
+  try {
+    const newValue = Math.max(0, tally.value + amount);
+    const newTopScore = Math.max(tally.topScore, newValue);
+
+    await updateTally(tally.uuid, {
+      value: newValue,
+      topScore: newTopScore,
+      lastTouched: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error("Failed to update tally value:", error);
+  }
+}
+
+/**
+ * Prepares the form for editing a specific tally.
+ * @param tally The tally to be edited.
+ */
+function editTally(tally: Tally) {
+  editingTally.value = tally;
+  showForm.value = true;
+  selectedTallyId.value = null;
+}
+
+/**
+ * Toggles the active/inactive status of a tally.
+ * @param tally The tally to toggle.
+ */
+async function toggleActive(tally: Tally) {
+  try {
+    await updateTally(tally.uuid, {
+      active: !tally.active
+    });
+  } catch (error) {
+    console.error("Failed to toggle tally status:", error);
+  }
+}
+
+/**
+ * Removes a tally from the collection after user confirmation.
+ * @param uuid The unique identifier of the tally to remove.
+ */
+async function removeTally(uuid: string) {
+  if (!confirm('Are you sure you want to remove this tally?')) return;
+  try {
+    await deleteTally(uuid);
+    selectedTallyId.value = null;
+  } catch (error) {
+    console.error("Failed to remove tally:", error);
+  }
+}
+
+/**
+ * Resets the form state and closes the form view.
+ */
+function cancelForm() {
+  showForm.value = false;
+  editingTally.value = null;
 }
 </script>
 

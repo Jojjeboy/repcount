@@ -15,29 +15,6 @@
     @mouseleave="isHovered = false"
   >
     <div
-      class="py-8 flex justify-start"
-    >
-      <router-link to="/" class="flex items-center gap-2">
-
-        <img
-          src="/images/logo/wave-logo_light.png"
-          alt="Logo"
-          class="dark:hidden w-8 h-8 object-contain"
-        />
-        <img
-          src="/images/logo/wave-logo_black.png"
-          alt="Logo"
-          class="hidden dark:block w-8 h-8 object-contain"
-        />
-        <span
-          v-if="isExpanded || isHovered || isMobileOpen"
-          class="text-xl pl-2 font-bold text-gray-800 dark:text-white"
-        >
-          {{ t('brand.name') }}
-        </span>
-      </router-link>
-    </div>
-    <div
       class="flex flex-col overflow-y-auto duration-300 ease-linear no-scrollbar"
     >
       <nav class="mb-6">
@@ -45,7 +22,7 @@
           <div v-for="(menuGroup, groupIndex) in menuGroups" :key="groupIndex">
             <h2
               :class="[
-                'mb-4 text-xs uppercase flex leading-[20px] text-gray-400',
+                'mb-4 text-xs uppercase flex items-center gap-2 leading-[20px] text-gray-400',
                 !isExpanded && !isHovered
                   ? 'lg:justify-center'
                   : 'justify-start',
@@ -53,6 +30,7 @@
             >
               <template v-if="isExpanded || isHovered || isMobileOpen">
                 {{ menuGroup.title }}
+                <ThemeToggler class="scale-75 origin-left" />
               </template>
               <HorizontalDots v-else />
             </h2>
@@ -207,6 +185,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useI18n } from "vue-i18n";
 
+import ThemeToggler from '../common/ThemeToggler.vue';
 import {
   GridIcon,
   ChevronDownIcon,

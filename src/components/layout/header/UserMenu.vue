@@ -4,13 +4,9 @@
       class="flex items-center text-gray-700 dark:text-gray-400"
       @click.prevent="toggleDropdown"
     >
-      <span class="mr-3 overflow-hidden rounded-full h-11 w-11">
-        <img :src="user?.photoURL || '/images/user/owner.jpg'" alt="User" />
+      <span class="overflow-hidden rounded-full h-11 w-11">
+        <img :src="user?.photoURL || '/repcount/images/user/owner.jpg'" alt="User" />
       </span>
-
-       <span class="block mr-1 font-medium text-theme-sm">{{ user?.displayName?.split(' ')[0] || $t('user.fallback_name') }} </span>
-
-      <ChevronDownIcon :class="{ 'rotate-180': dropdownOpen }" />
     </button>
 
     <!-- Dropdown Start -->
@@ -57,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-import { ChevronDownIcon, LogoutIcon, SettingsIcon } from '@/icons'
+import { LogoutIcon, SettingsIcon } from '@/icons'
 import { useRouter } from 'vue-router'
 import { ref, onMounted, onUnmounted } from 'vue'
 import { signOut } from 'firebase/auth'
