@@ -85,10 +85,16 @@
           <div
             v-for="(entry, index) in tally.history.slice().reverse()"
             :key="index"
-            class="flex justify-between items-center p-2 text-xs rounded bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-gray-800"
+            class="flex items-center gap-3 p-2 text-xs rounded bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-gray-800"
           >
-            <span class="text-gray-500 dark:text-gray-400">{{ entry.date }}</span>
-            <span class="font-medium text-gray-700 dark:text-gray-300">{{ entry.value }}</span>
+            <span class="text-gray-500 dark:text-gray-400 whitespace-nowrap w-24 truncate">{{ entry.date }}</span>
+            <div class="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div
+                :style="{ width: `${(entry.value / (tally.topScore || 1)) * 100}%`, backgroundColor: tally.color }"
+                class="h-full rounded-full transition-all duration-500"
+              ></div>
+            </div>
+            <span class="font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap min-w-[20px] text-right">{{ entry.value }}</span>
           </div>
            <p v-if="tally.history.length === 0" class="text-xs text-gray-400 text-center py-2">
              {{ $t('tallies.no_history') }}
