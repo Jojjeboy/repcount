@@ -7,25 +7,10 @@
         <h3
           class="mb-4 font-semibold text-gray-800 text-theme-xl dark:text-white/90 sm:text-2xl"
         >
-          Start
+          {{ $t('tallies.my_tallies') }}
         </h3>
 
-        <ComponentCard :title="$t('tallies.my_tallies')">
-          <!-- Quick Actions: Always available -->
-          <div class="flex gap-3 mb-6">
-            <button
-              @click="showExamples = true; showForm = false"
-              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-            >
-              {{ $t('tallies.add_example') }}
-            </button>
-            <button
-              @click="showForm = true; showExamples = false"
-              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
-            >
-              {{ $t('tallies.create_new') }}
-            </button>
-          </div>
+        <div class="text-left">
 
           <!-- Example Selection: Shown when showExamples is true -->
           <TallyExamples
@@ -62,7 +47,23 @@
               <p class="text-gray-500 dark:text-gray-400">{{ $t('tallies.no_tallies') }}</p>
             </div>
           </div>
-        </ComponentCard>
+
+          <!-- Quick Actions: Always available -->
+          <div class="flex gap-3 mt-6">
+            <button
+              @click="showExamples = true; showForm = false"
+              class="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              {{ $t('tallies.add_example') }}
+            </button>
+            <button
+              @click="showForm = true; showExamples = false"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 dark:text-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700 transition-colors"
+            >
+              {{ $t('tallies.create_new') }}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </AdminLayout>
@@ -71,7 +72,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from 'vue';
 import AdminLayout from "@/components/layout/AdminLayout.vue";
-import ComponentCard from "@/components/common/ComponentCard.vue";
 import { useTallies, type Tally } from "@/composables/useTallies";
 import exampleData from "@/example/example.data.json";
 

@@ -82,13 +82,13 @@
         </button>
 
         <div v-if="showHistory" class="max-h-32 overflow-y-auto space-y-1 pr-1 custom-scrollbar animate-in fade-in slide-in-from-top-1 duration-200">
-          <div
-            v-for="(entry, index) in tally.history.slice().reverse()"
-            :key="index"
-            class="flex items-center gap-3 p-2 text-xs rounded bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-gray-800"
-          >
-            <span class="text-gray-500 dark:text-gray-400 whitespace-nowrap w-24 truncate">{{ entry.date }}</span>
-            <div class="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+            <div
+              v-for="(entry, index) in tally.history.slice().reverse()"
+              :key="index"
+              class="flex items-center gap-3 p-2 text-xs rounded bg-gray-50 dark:bg-white/[0.02] border border-gray-100 dark:border-gray-800"
+            >
+              <span class="text-gray-500 dark:text-gray-400 whitespace-nowrap w-24 truncate">{{ formatDate(entry.date) }}</span>
+              <div class="flex-1 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
               <div
                 :style="{ width: `${(entry.value / (tally.topScore || 1)) * 100}%`, backgroundColor: tally.color }"
                 class="h-full rounded-full transition-all duration-500"
@@ -131,6 +131,7 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ChevronDownIcon from "@/icons/ChevronDownIcon.vue";
 import type { Tally } from "@/composables/useTallies";
 
@@ -141,7 +142,31 @@ interface Props {
 
 defineProps<Props>();
 
+const { t } = useI18n();
 const showHistory = ref(false);
+
+function formatDate(dateString: string) {
+  if (!dateString) return '';
+
+  const date = new Date(dateString);
+  const today = new Date();
+
+  // Reset times to midnight for accurate date comparison
+  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const tdy = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
+  const diffTime = tdy.getTime() - d.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+
+  if (diffDays === 1) {
+    return t('tallies.yesterday');
+  }
+
+  return new Intl.DateTimeFormat(navigator.language, {
+    day: 'numeric',
+    month: 'long',
+  }).format(date);
+}
 
 defineEmits<{
   'toggle-expand': [];
